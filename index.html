@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>JackyFu Minting Web | ^^</title>
+    <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+	<script type="text/javascript" src="MyContractParam.js"></script>
+</head>
+<body>
+    <div>
+        <p>We will show your Wallet address here once it connet to our site - <span id="Wallet-Address"></span></p>
+        <button id="Mint">Click to mint JackyFu's NFT</button>
+    </div>
+    <script type="text/javascript">
+        var account = null;
+        var contract = null;
+        const ABI = myABI;
+        const Address = myContractAddress;
+        (async () => {
+            if (window.ethereum){               
+                await window.ethereum.send('eth_requestAccounts');
+                window.web3 = new Web3(window.ethereum);
+            
+                var accounts = await web3.eth.getAccounts();
+                account = accounts[0];
+                document.getElementById('Wallet-Address').textContent = account;
+
+                // Activate
+                contract = new web3.eth.Contract(ABI, Address)
+                document.getElementById('Mint').onclick = () => {
+                    // alert("test func.")
+					contract.methods.safeMint(account).send( { from: account, value: "10000000000000000"} )
+                }
+            }
+        })() 
+    </script>
+</body>
+</html>
